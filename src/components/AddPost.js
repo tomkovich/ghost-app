@@ -1,20 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import {
+  TextField,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  FormHelperText,
   Button,
-  Snackbar,
 } from "@material-ui/core";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import { useState } from "react";
+import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import FETCH_MOVIES from "../util/gql";
-import gql from "graphql-tag";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,12 +21,16 @@ const useStyles = makeStyles(() => ({
     width: "750px",
   },
   textField: {
-    marginBottom: 30
+    marginBottom: 30,
+  },
+  select: {
+    width: 200,
   },
   button: {
     backgroundColor: "#ff7043",
     color: "#fff",
     margin: "20px auto",
+    width: "100%",
   },
   success: {
     fontSize: 14,
@@ -41,34 +42,29 @@ const useStyles = makeStyles(() => ({
     marginBottom: 10,
     color: "red",
     width: "100%",
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
+  title: {
+    textAlign: "center",
+  },
 }));
 
 const AddPost = () => {
   const classes = useStyles();
 
   const [values, setValues] = useState({
-    date: new Date().getFullYear(),
     title: "",
+    date: new Date().getFullYear(),
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
-
-  let currentData = new Date().getFullYear();
-  let years = [];
-  for (let i = 2000; i <= currentData; i++) {
-    years.push(i);
-  }
 
   const [addPost] = useMutation(ADD_POST, {
     update(cache, { data: { addMovie } }) {
-
       if (cache.data.data.ROOT_QUERY) {
         const movies = cache.readQuery({
           query: FETCH_MOVIES,
         });
-
         cache.writeQuery({
           query: FETCH_MOVIES,
           data: {
@@ -80,7 +76,7 @@ const AddPost = () => {
         title: "",
         date: new Date().getFullYear(),
       });
-      setError('');
+      setError("");
       setOpen(true);
     },
     onError(e) {
@@ -96,62 +92,62 @@ const AddPost = () => {
     });
   };
 
+  let years = [];
+  for (let i = 2000; i <= values.date; i++) {
+    years.push(i);
+  }
+
   let formSubmit = (e) => {
     e.preventDefault();
     addPost();
   };
 
   let handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
-    <form className={classes.root} onSubmit={formSubmit}>
-      <TextField
-        label="Title"
-        placeholder="How is it?"
-        helperText="It should be movie or tv show"
-        fullWidth
-        name="title"
-        value={values.title}
-        margin="normal"
-        onChange={handleChange}
-        helperText={error && error}
-        error={error ? true : false}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        className={classes.textField}
-      />
-      <FormControl className={classes.formControl}>
-        <InputLabel>Year</InputLabel>
-        <Select value={values.date} name="date" onChange={handleChange}>
-          {years.map((val, index) => (
-            <MenuItem key={val + index} value={val}>
-              {val}
-            </MenuItem>
-          ))}
-        </Select>
-        <FormHelperText>Year of movie or tv show</FormHelperText>
-      </FormControl>
-      {open && (
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          className={classes.success}
-        >
-          <AlertTitle>A Movie added successful!</AlertTitle>
-        </Alert>
-      )}
-      <Button
-        type="submit"
-        variant="contained"
-        className={classes.button}
-        fullWidth
-      >
-        Okay
-      </Button>
-    </form>
+    <>
+      <h2 className={classes.title}>Add Post</h2>
+      <form className={classes.root} onSubmit={formSubmit}>
+        <TextField
+          variant="outlined"
+          label="Title"
+          type="text"
+          name="title"
+          fullWidth
+          error={error ? true : false}
+          helperText={error && error}
+          className={classes.textField}
+          value={values.title}
+          onChange={handleChange}
+        />
+        <FormControl className={classes.formControl}>
+          <InputLabel>Year</InputLabel>
+          <Select
+            className={classes.select}
+            value={values.date}
+            onChange={handleChange}
+            name="date"
+          >
+            {years.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button type="submit" variant="contained" className={classes.button}>
+          Okay
+        </Button>
+        {open && (
+          <Alert onClose={handleClose} severity="success">
+            <AlertTitle>Success</AlertTitle>A Movie added{" "}
+            <strong>successful!</strong>
+          </Alert>
+        )}
+      </form>
+    </>
   );
 };
 

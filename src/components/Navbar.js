@@ -73,13 +73,6 @@ const Navbar = () => {
         to="/"
       />
       <BottomNavigationAction
-        label="Add Movie"
-        icon={<AddIcon />}
-        className={classes.icon}
-        component={Link}
-        to="/movie"
-      />
-      <BottomNavigationAction
         icon={<PersonIcon />}
         className={classes.login}
         component={Link}
