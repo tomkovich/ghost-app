@@ -4,10 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   error: {
     fontSize: 14,
     marginBottom: 10,
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginBottom: 25,
   },
-}));
+});
 
 const Login = (props) => {
   const context = useContext(AuthContext);
@@ -34,32 +34,34 @@ const Login = (props) => {
 
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
-    username: '',
-    password: ''
-  })
+    username: "",
+    password: "",
+  });
 
   let [loginUser, { loading }] = useMutation(LOGIN_USER, {
-      update(_, { data: { login: user }}) {
-        context.login(user)
-        props.history.push('/');
-      },
-      onError(err) {
-        setErrors(err.graphQLErrors[0].extensions.exception.errors);
-      },
-      variables: values
-  })
+    update(_, { data: { login: user } }) {
+      context.login(user);
+      props.history.push("/");
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
+    variables: values,
+  });
 
-  let formSubmit = e => {
+  if (loading) return null;
+
+  let formSubmit = (e) => {
     e.preventDefault();
     loginUser();
-  }
+  };
 
-  let onChange = e => {
+  let onChange = (e) => {
     setValues({
       ...values,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <>
@@ -90,7 +92,9 @@ const Login = (props) => {
           value={values.password}
           onChange={onChange}
         />
-        {errors.general && <div className={classes.error}>{errors.general}</div>}
+        {errors.general && (
+          <div className={classes.error}>{errors.general}</div>
+        )}
         <Button type="submit" color="primary">
           Submit
         </Button>
@@ -101,8 +105,10 @@ const Login = (props) => {
 
 const LOGIN_USER = gql`
   mutation login($username: String!, $password: String!) {
-    login( username: $username, password: $password) {
-      id username token
+    login(username: $username, password: $password) {
+      id
+      username
+      token
     }
   }
 `;

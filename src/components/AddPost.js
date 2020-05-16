@@ -65,6 +65,7 @@ const AddPost = () => {
         const movies = cache.readQuery({
           query: FETCH_MOVIES,
         });
+
         cache.writeQuery({
           query: FETCH_MOVIES,
           data: {
@@ -103,8 +104,8 @@ const AddPost = () => {
   };
 
   let handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <>

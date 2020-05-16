@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Register = (props) => {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   const classes = useStyles();
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
@@ -40,7 +40,7 @@ const Register = (props) => {
 
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(_, { data: { register: user } }) {
-      context.login(user)
+      context.login(user);
       props.history.push("/");
     },
     onError(err) {
@@ -48,6 +48,8 @@ const Register = (props) => {
     },
     variables: values,
   });
+
+  if (loading) return null;
 
   let onChange = (e) => {
     setValues({
@@ -64,7 +66,7 @@ const Register = (props) => {
   return (
     <>
       <div className={classes.image}>
-        <img src={cat} />
+        <img src={cat} alt="register" />
       </div>
       <h2 className={classes.title}>Register</h2>
 

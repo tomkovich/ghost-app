@@ -7,13 +7,15 @@ import Login from "../pages/Login.js";
 import Register from "../pages/Register.js";
 import AuthRoute from "./AuthRoute.js";
 import SingleMovie from "../pages/SingleMovie.js";
+import User from "../pages/User.js";
 
 const Routes = () => {
   return (
     <>
       <Route exact path="/" render={() => <Home />} />
       <Route exact path="/movie" render={() => <Post />} />
-      <Route exact path="/:id" render={() => <SingleMovie />} />
+      <Route exact path="/movie/:id" render={() => <SingleMovie />} />
+      <Route path="/user/:username" render={() => <User />} />
       <AuthRoute exact path="/login" component={Login} />
       <AuthRoute exact path="/register" component={Register} />
     </>

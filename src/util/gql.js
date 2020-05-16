@@ -4,9 +4,9 @@ const FETCH_MOVIES = gql`
   {
     getMovies {
       title
+      id
       date
       username
-      id
     }
   }
 `;
