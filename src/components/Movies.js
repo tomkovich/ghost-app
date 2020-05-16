@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Movie from "./Movie";
+import FETCH_MOVIES from "../util/gql";
 
 const useStyles = makeStyles({
   root: {
@@ -25,14 +26,7 @@ const useStyles = makeStyles({
 const Movies = () => {
   const classes = useStyles();
   const { loading, error, data } = useQuery(FETCH_MOVIES);
-  const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
-
-  useEffect(() => {
-    if (data) {
-      setPosts(data.getMovies);
-    }
-  }, [data]);
 
   if (error) return `Error :(`;
 
@@ -41,8 +35,8 @@ const Movies = () => {
       {loading ? (
         <CircularProgress className={classes.progress} color="secondary" />
       ) : (
-        posts.length > 0 &&
-        posts.map((movie, index) => (
+        data.getMovies.length > 0 &&
+        data.getMovies.map((movie, index) => (
           <Grid key={index} item xs={5}>
             <Movie user={user} movie={movie} />
           </Grid>
@@ -51,16 +45,5 @@ const Movies = () => {
     </Grid>
   );
 };
-
-const FETCH_MOVIES = gql`
-  {
-    getMovies {
-      title
-      date
-      username
-      id
-    }
-  }
-`;
 
 export default Movies;

@@ -15,7 +15,7 @@ import { Button } from "@material-ui/core";
 const DeleteButton = ({ id }) => {
   const [open, setOpen] = useState(false);
 
-  const [deletePost] = useMutation(DELETE_POST, {
+  const [deletePost] = useMutation(DELETE_ITEM, {
     variables: {
       id,
     },
@@ -32,6 +32,9 @@ const DeleteButton = ({ id }) => {
           data,
         });
       }
+    },
+    onError(e) {
+      console.log(e.graphQLErrors[0].message);
     },
   });
 
@@ -52,7 +55,7 @@ const DeleteButton = ({ id }) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={() => setOpen(false)} color="primary">
+            <Button onClick={() => setOpen(false)} autoFocus color="primary">
               Cancel
             </Button>
             <Button onClick={onDelete} color="primary">
@@ -68,7 +71,7 @@ const DeleteButton = ({ id }) => {
   );
 };
 
-const DELETE_POST = gql`
+const DELETE_ITEM = gql`
   mutation deleteMovie($id: ID!) {
     deleteMovie(id: $id) {
       title
