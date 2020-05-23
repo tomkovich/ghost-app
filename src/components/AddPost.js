@@ -12,6 +12,7 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import FETCH_MOVIES from "../util/gql";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import Subscription from "./Subscription";
 
 const useStyles = makeStyles(() => ({
   root: {

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { AuthContext } from "../context/auth";
 
 /* Material */
@@ -25,20 +24,27 @@ const useStyles = makeStyles({
 
 const Movies = () => {
   const classes = useStyles();
+  const [posts, setPosts] = useState([]);
   const { loading, error, data } = useQuery(FETCH_MOVIES);
   const { user } = useContext(AuthContext);
 
-  if (error) return `Error :(`;
+  useEffect(() => {
+    if (data && !error) {
+      setPosts(data.getMovies);
+    }
+  }, [data, error]);
+
+  if (error) return "Error :(";
 
   return (
     <Grid container justify="center" spacing={2}>
       {loading ? (
         <CircularProgress className={classes.progress} color="secondary" />
       ) : (
-        data.getMovies.length > 0 &&
-        data.getMovies.map((movie, index) => (
+        posts.length > 0 &&
+        posts.map((movie, index) => (
           <Grid key={index} item xs={5}>
-            <Movie user={user} movie={movie} />
+            <Movie setPosts={setPosts} user={user} movie={movie} />
           </Grid>
         ))
       )}

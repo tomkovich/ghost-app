@@ -39,7 +39,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Movie = ({ movie, user }) => {
+const Movie = ({ movie, user, setPosts }) => {
   const { title, date, username, id } = movie;
 
   const classes = useStyles();
@@ -76,7 +76,9 @@ const Movie = ({ movie, user }) => {
         >
           Learn more
         </Button>
-        {user && user.username === username && <DeleteButton id={id} />}
+        {user && user.username === username && (
+          <DeleteButton setPosts={setPosts} id={id} />
+        )}
       </CardActions>
     </Card>
   );

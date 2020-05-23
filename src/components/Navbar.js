@@ -11,6 +11,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 import logo from "../images/ghost.svg";
 import { AuthContext } from "../context/auth";
+import Subscription from "./Subscription";
 
 const useStyles = makeStyles({
   root: {
@@ -123,9 +124,14 @@ const Navbar = () => {
         onClick={logout}
       />
     </BottomNavigation>
-  )
+  );
 
-  return navbarLayout;
+  return (
+    <>
+      {navbarLayout}
+      <Subscription />
+    </>
+  );
 };
 
 export default Navbar;
