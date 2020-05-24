@@ -1,19 +1,20 @@
 import React from "react";
-import { ApolloClient, HttpLink, split, ApolloLink } from "apollo-boost";
+import { ApolloClient, HttpLink, ApolloLink, split } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { InMemoryCache } from "apollo-boost";
-import { WebSocketLink } from "apollo-link-ws";
-
-import App from "./App";
-import { getMainDefinition } from "apollo-utilities";
 
 import { SubscriptionClient } from "subscriptions-transport-ws";
+import { WebSocketLink } from "apollo-link-ws";
+import { getMainDefinition } from "apollo-utilities";
 
+import App from "./App";
+
+// Web Socket
 const GRAPHQL_ENDPOINT = "ws://localhost:4000/graphql";
-
-const sub = new SubscriptionClient(GRAPHQL_ENDPOINT, {
+const subLink = new SubscriptionClient(GRAPHQL_ENDPOINT, {
   reconnect: true,
 });
+const wsLink = new WebSocketLink(subLink);
 
 const httpLink = new HttpLink({ uri: "http://localhost:4000" });
 const authLink = new ApolloLink((operation, forward) => {
@@ -26,9 +27,7 @@ const authLink = new ApolloLink((operation, forward) => {
   }));
   return forward(operation);
 });
-
 const httpAuthLink = authLink.concat(httpLink);
-const wsLink = new WebSocketLink(sub);
 
 const link = split(
   ({ query }) => {
@@ -45,14 +44,6 @@ const link = split(
 const client = new ApolloClient({
   link,
   cache: new InMemoryCache(),
-  request: (operation) => {
-    const token = localStorage.getItem("token");
-    operation.setContext({
-      headers: {
-        authorization: token ? token : "",
-      },
-    });
-  },
 });
 
 const Provider = () => {

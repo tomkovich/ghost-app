@@ -4,52 +4,36 @@ import gql from "graphql-tag";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 
 const Subscription = () => {
-  const classes = useStyles();
   const [open, setOpen] = useState(false);
-
-  const { loading, data } = useSubscription(POSTS_SUB);
+  const { loading, data } = useSubscription(POST_SUBSCRIPTION);
 
   useEffect(() => {
-    if (data) setOpen(true);
-  }, [data]);
+    if (!loading && data) setOpen(true);
+  }, [loading, data]);
 
   return (
-    <div className={classes.root}>
-      {/* <Button variant="outlined" onClick={() => setOpen(true)}>
-        Open success snackbar
-      </Button> */}
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={() => setOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
-      >
-        <MuiAlert onClose={() => setOpen(false)} severity="info">
-          {!loading && (
+    !loading && (
+      <div>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={() => setOpen(false)}
+          anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        >
+          <MuiAlert onClose={() => setOpen(false)} severity="info">
             <div>
-              New movie added: <strong>{data.newMovie.title}</strong>
+              Movie added: <strong>{data.newMovie.title}</strong>
             </div>
-          )}
-        </MuiAlert>
-      </Snackbar>
-    </div>
+          </MuiAlert>
+        </Snackbar>
+      </div>
+    )
   );
 };
 
-const POSTS_SUB = gql`
+const POST_SUBSCRIPTION = gql`
   subscription {
     newMovie {
       title

@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+
 import { makeStyles } from "@material-ui/core/styles";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import MovieIcon from "@material-ui/icons/Movie";
 import AddIcon from "@material-ui/icons/Add";
-import { Link } from "react-router-dom";
 import PersonIcon from "@material-ui/icons/Person";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";

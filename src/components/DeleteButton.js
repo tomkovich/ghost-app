@@ -12,7 +12,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Button } from "@material-ui/core";
 
-const DeleteButton = ({ id, setPosts }) => {
+const DeleteButton = ({ id }) => {
   const [open, setOpen] = useState(false);
 
   const [deletePost] = useMutation(DELETE_ITEM, {
@@ -33,7 +33,6 @@ const DeleteButton = ({ id, setPosts }) => {
         });
 
         setOpen(false);
-        setPosts(data.getMovies);
       }
     },
     onError(e) {
